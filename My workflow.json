@@ -1,0 +1,174 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎯 Your Skill Mastery Blueprint",
+        "formDescription": "Tell us one skill you want to conquer — tech or non-tech — and your AI mentor will email you a complete mastery roadmap.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your Name"
+            },
+            {
+              "fieldLabel": "Your Email",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Which skill do you want to master?",
+              "fieldType": "textarea",
+              "placeholder": "e.g. Public speaking / Python programming / Digital marketing / Video editing / Cooking / Sales"
+            },
+            {
+              "fieldLabel": "Where are you right now with this skill",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Total beginner — starting from zero"
+                  },
+                  {
+                    "option": "Some basics — I've dabbled a little"
+                  },
+                  {
+                    "option": "Intermediate — I can do it, want to go pro "
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "How much time can you give it weekly?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "A few hours a week (3-5 hrs)"
+                  },
+                  {
+                    "option": "Steady pace (6-10 hrs)"
+                  },
+                  {
+                    "option": "S erious focus (10-20 hrs)"
+                  },
+                  {
+                    "option": "All in (20+ hrs)"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        176,
+        16
+      ],
+      "id": "12911e43-ed8f-414d-94a3-3af67ff15a2b",
+      "name": "On form submission",
+      "webhookId": "fd453a57-8987-4587-8045-3dc3eef8710e"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a world-class mentor and master practitioner who can teach ANY skill — technical or non-technical — and turn a complete beginner into an expert. Your job is to take one skill a person wants to master and produce a beautifully designed, exceptionally detailed mastery roadmap as an HTML email, including visual charts.\n\nHere are the person's details:\n- Name: {{ $json['Your Name'] }}\n- Skill they want to master: {{ $json['Which skill do you want to master?'] }}\n- Current level: {{ $json['Where are you right now with this skill?'] }}\n- Weekly time available: {{ $json['How much time can you give it weekly?'] }}\n\nThink like the single best mentor alive for THIS specific skill. Give equally deep, practical guidance whether the skill is technical or non-technical. Be specific and concrete everywhere — name real tools, real drills, real resources, real numbers. No vague filler.\n\nFIRST, WORK OUT THESE NUMBERS — you will paste them into the charts:\n1. currentLevelPercent: how far along the road to mastery they already are, as a percentage. Total beginner = about 5-10%, Some basics = about 20-30%, Intermediate = about 45-55%. Pick one number, write it as a percent string like 25%.\n2. Time to each stage, in total practice hours, realistic for this skill: hoursBeginner, hoursIntermediate, hoursAdvanced, hoursMaster. Then convert each to a bar width percentage out of the largest one (hoursMaster) — barBeginner, barIntermediate, barAdvanced, barMaster (barMaster will be 100%). Write each as a percent string.\n3. Income levels for this skill at three stages — incomeBeginner, incomeIntermediate, incomePro — as realistic rough monthly figures. Then convert each to a bar width percentage out of incomePro — incBarBeginner, incBarIntermediate, incBarPro (incBarPro will be 100%). Write each as a percent string.\n4. difficultyPercent: how hard this skill is to learn, as a percent string (easy skill ~30%, moderate ~55%, hard ~80%).\n5. demandPercent: how in-demand this skill is in the job/freelance market right now, as a percent string.\n6. With their weekly time, estimate weeksToJob: roughly how many weeks of consistent effort until they could do paid work at a basic level.\n\nOutput ONLY the raw HTML below. No explanation, no markdown, no ```html fences. Pure HTML starting with <div> and ending with </div>. Replace EVERY [token] and [placeholder] with real, specific content. Every percent token (like [currentLevelPercent], [barBeginner], [incBarPro], [difficultyPercent], [demandPercent]) MUST become a real percentage string ending in % — never leave a bracket visible.\n\n<div style=\"max-width:600px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;\">\n\n<div style=\"background:linear-gradient(135deg,#6C5CE7,#a29bfe);padding:28px 30px;border-radius:12px 12px 0 0;\">\n<p style=\"margin:0 0 4px;font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-weight:600;\">SKILL MASTERY BLUEPRINT</p>\n<p style=\"margin:0 0 14px;font-size:22px;color:#ffffff;font-weight:700;line-height:1.3;\">🎯 Master [Skill]</p>\n<p style=\"margin:0;\">\n<span style=\"background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:20px;color:#fff;font-size:11px;font-weight:500;\">For [Name]</span>\n<span style=\"margin-left:6px;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:20px;color:#fff;font-size:11px;font-weight:500;\">Starting: [level]</span>\n</p>\n</div>\n\n<div style=\"background:#ffffff;padding:30px 30px 10px;border-left:1px solid #f0f0f0;border-right:1px solid #f0f0f0;color:#2d3436;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 8px;letter-spacing:1px;\">🌟 THE BIG PICTURE</h3>\n<p style=\"font-size:16px;color:#2d3436;line-height:1.6;margin:0 0 12px;font-weight:500;\">[One inspiring, honest sentence on what mastering this skill really means and why it is worth it.]</p>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 24px;\">[2-3 sentences: a realistic view of the journey from their level to mastery and what the path looks like.]</p>\n\n<p style=\"font-size:12px;color:#888;font-weight:600;letter-spacing:1px;margin:0 0 8px;\">HOW FAR ALONG YOU ALREADY ARE</p>\n<div style=\"background:#eee;border-radius:8px;height:22px;margin:0 0 4px;\">\n<div style=\"background:linear-gradient(to right,#6C5CE7,#a29bfe);height:22px;border-radius:8px;width:[currentLevelPercent];text-align:right;\"><span style=\"color:#fff;font-size:11px;font-weight:700;line-height:22px;padding-right:8px;\">[currentLevelPercent]</span></div>\n</div>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 28px;\"><tr><td style=\"font-size:9px;color:#888;font-weight:700;text-align:left;\">START</td><td style=\"font-size:9px;color:#6C5CE7;font-weight:700;text-align:right;\">MASTERY</td></tr></table>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">📊 SKILL SNAPSHOT</h3>\n<p style=\"font-size:12px;color:#888;font-weight:600;margin:0 0 4px;\">LEARNING DIFFICULTY</p>\n<div style=\"background:#eee;border-radius:6px;height:14px;margin:0 0 12px;\"><div style=\"background:#E07856;height:14px;border-radius:6px;width:[difficultyPercent];\"></div></div>\n<p style=\"font-size:12px;color:#888;font-weight:600;margin:0 0 4px;\">MARKET DEMAND</p>\n<div style=\"background:#eee;border-radius:6px;height:14px;margin:0 0 14px;\"><div style=\"background:#00b894;height:14px;border-radius:6px;width:[demandPercent];\"></div></div>\n<div style=\"background:#F8F7FF;padding:12px 16px;border-radius:8px;margin:0 0 28px;\">\n<p style=\"font-size:13px;color:#2d3436;line-height:1.6;margin:0;\">⏱️ <strong>Time to first paid work:</strong> roughly [weeksToJob] weeks at your chosen pace.</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🧩 WHAT THIS SKILL IS MADE OF</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence: mastery is not one thing — it is a stack of these core sub-skills.]</p>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🔹 <strong>[Sub-skill 1]</strong> — [why it matters]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🔹 <strong>[Sub-skill 2]</strong> — [why it matters]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🔹 <strong>[Sub-skill 3]</strong> — [why it matters]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🔹 <strong>[Sub-skill 4]</strong> — [why it matters]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">🔹 <strong>[Sub-skill 5]</strong> — [why it matters]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🚀 HOW TO START — YOUR FIRST STEPS</h3>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">1️⃣ <strong>[First step]</strong> — [what to actually do]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">2️⃣ <strong>[Second step]</strong> — [what to actually do]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">3️⃣ <strong>[Third step]</strong> — [what to actually do]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">4️⃣ <strong>[Fourth step]</strong> — [what to actually do]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 6px;letter-spacing:1px;\">🪜 YOUR MASTERY PATH — 4 STAGES</h3>\n<p style=\"font-size:13px;color:#888;line-height:1.6;margin:0 0 14px;\">From total beginner to top-tier. Each stage builds on the last.</p>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse:collapse;margin:0 0 16px;border-radius:8px;overflow:hidden;border:1px solid #eee;\">\n<tr style=\"background:#6C5CE7;\">\n<td style=\"padding:8px 10px;font-size:11px;color:#fff;font-weight:700;\">STAGE</td>\n<td style=\"padding:8px 10px;font-size:11px;color:#fff;font-weight:700;\">WHAT YOU LEARN &amp; CAN DO</td>\n</tr>\n<tr style=\"background:#F8F7FF;\">\n<td style=\"padding:10px;font-size:12px;color:#6C5CE7;font-weight:700;\">🟢 Beginner</td>\n<td style=\"padding:10px;font-size:12px;color:#444;line-height:1.6;\">[the foundations + what they can do by the end of this stage]</td>\n</tr>\n<tr style=\"background:#ffffff;\">\n<td style=\"padding:10px;font-size:12px;color:#6C5CE7;font-weight:700;\">🔵 Intermediate</td>\n<td style=\"padding:10px;font-size:12px;color:#444;line-height:1.6;\">[the next layer + what they can do by the end of this stage]</td>\n</tr>\n<tr style=\"background:#F8F7FF;\">\n<td style=\"padding:10px;font-size:12px;color:#6C5CE7;font-weight:700;\">🟣 Advanced</td>\n<td style=\"padding:10px;font-size:12px;color:#444;line-height:1.6;\">[professional-level skills + what they can do by the end of this stage]</td>\n</tr>\n<tr style=\"background:#ffffff;\">\n<td style=\"padding:10px;font-size:12px;color:#6C5CE7;font-weight:700;\">🏆 Master / Ninja</td>\n<td style=\"padding:10px;font-size:12px;color:#444;line-height:1.6;\">[the elite skills that separate the top 1% + what mastery looks like]</td>\n</tr>\n</table>\n<p style=\"font-size:12px;color:#888;font-weight:600;letter-spacing:1px;margin:0 0 8px;\">PRACTICE HOURS TO REACH EACH STAGE</p>\n<table width=\"100%\" cellpadding=\"4\" cellspacing=\"0\" style=\"margin:0 0 28px;\">\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;width:90px;\">🟢 Beginner</td><td><div style=\"background:#a29bfe;height:16px;border-radius:4px;width:[barBeginner];\"></div></td><td style=\"font-size:10px;color:#888;width:60px;text-align:right;\">[hoursBeginner] h</td></tr>\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;\">🔵 Intermediate</td><td><div style=\"background:#8e80ee;height:16px;border-radius:4px;width:[barIntermediate];\"></div></td><td style=\"font-size:10px;color:#888;text-align:right;\">[hoursIntermediate] h</td></tr>\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;\">🟣 Advanced</td><td><div style=\"background:#6C5CE7;height:16px;border-radius:4px;width:[barAdvanced];\"></div></td><td style=\"font-size:10px;color:#888;text-align:right;\">[hoursAdvanced] h</td></tr>\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;\">🏆 Master</td><td><div style=\"background:#4A3FB8;height:16px;border-radius:4px;width:[barMaster];\"></div></td><td style=\"font-size:10px;color:#888;text-align:right;\">[hoursMaster] h</td></tr>\n</table>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">📅 YOUR 30-DAY KICKSTART PLAN</h3>\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse:collapse;margin:0 0 28px;border-radius:8px;overflow:hidden;border:1px solid #eee;\">\n<tr style=\"background:#F8F7FF;\"><td style=\"padding:10px 12px;font-size:12px;color:#6C5CE7;font-weight:700;width:80px;\">Week 1</td><td style=\"padding:10px 12px;font-size:12px;color:#444;line-height:1.6;\">[concrete focus + a practice goal]</td></tr>\n<tr style=\"background:#ffffff;\"><td style=\"padding:10px 12px;font-size:12px;color:#6C5CE7;font-weight:700;\">Week 2</td><td style=\"padding:10px 12px;font-size:12px;color:#444;line-height:1.6;\">[concrete focus + a practice goal]</td></tr>\n<tr style=\"background:#F8F7FF;\"><td style=\"padding:10px 12px;font-size:12px;color:#6C5CE7;font-weight:700;\">Week 3</td><td style=\"padding:10px 12px;font-size:12px;color:#444;line-height:1.6;\">[concrete focus + a practice goal]</td></tr>\n<tr style=\"background:#ffffff;\"><td style=\"padding:10px 12px;font-size:12px;color:#6C5CE7;font-weight:700;\">Week 4</td><td style=\"padding:10px 12px;font-size:12px;color:#444;line-height:1.6;\">[concrete focus + a practice goal]</td></tr>\n</table>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🛠️ YOUR STARTER TOOLKIT</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence on the basic setup, tools or kit a beginner needs — keep it low-cost and accessible.]</p>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">✅ <strong>[Tool/item 1]</strong> — [what it is for, free or paid]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">✅ <strong>[Tool/item 2]</strong> — [what it is for, free or paid]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">✅ <strong>[Tool/item 3]</strong> — [what it is for, free or paid]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🧰 TEMPLATES &amp; FRAMEWORKS</h3>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">📋 <strong>[Template/framework 1]</strong> — [what it is and how to use it]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">📋 <strong>[Template/framework 2]</strong> — [what it is and how to use it]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">📋 <strong>[Template/framework 3]</strong> — [what it is and how to use it]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🌀 DAILY PRACTICE HABIT</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence: the small daily habit that compounds into mastery, sized to their weekly time.]</p>\n<div style=\"background:#F8F7FF;border-left:3px solid #6C5CE7;padding:14px 18px;border-radius:0 8px 8px 0;margin:0 0 28px;\">\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0;\">🔁 <strong>Daily ritual:</strong> [a specific repeatable practice routine they can do most days].</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🥷 NINJA TRICKS — GO FROM GOOD TO ELITE</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence: the insider edge that separates true experts from average practitioners.]</p>\n<div style=\"background:#2d3436;padding:18px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0 0 8px;\">⚡ <strong>[Pro trick 1]</strong> — [the insider technique]</p>\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0 0 8px;\">⚡ <strong>[Pro trick 2]</strong> — [the insider technique]</p>\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0 0 8px;\">⚡ <strong>[Pro trick 3]</strong> — [the insider technique]</p>\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0;\">⚡ <strong>[Pro trick 4]</strong> — [the insider technique]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">📚 BEST RESOURCES TO LEARN FROM</h3>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🎥 <strong>Watch:</strong> [specific channels, courses or video resources]</p>\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">📖 <strong>Read:</strong> [specific books, blogs or documentation]</p>\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🛠️ <strong>Practice with:</strong> [specific tools, platforms or apps]</p>\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0;\">👥 <strong>Join:</strong> [specific communities, forums or groups]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🏅 PROVE YOU ARE GOOD — MILESTONES</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence: skill is invisible until you show it — these are the proof-points that signal real ability.]</p>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🎖️ <strong>[Milestone 1]</strong> — [a concrete thing to build, win or complete]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">🎖️ <strong>[Milestone 2]</strong> — [a concrete thing to build, win or complete]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">🎖️ <strong>[Milestone 3]</strong> — [a concrete thing to build, win or complete]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">💼 WHERE YOU CAN USE THIS SKILL</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[2-3 sentences: the real-world places, roles, industries and situations where this skill is valuable.]</p>\n<div style=\"background:#F8F7FF;border-left:3px solid #6C5CE7;padding:14px 18px;border-radius:0 8px 8px 0;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">🎯 <strong>In demand for:</strong> [3-4 specific roles, jobs or use cases]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">💰 HOW TO MAKE MONEY FROM IT</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence on earning potential and how soon a learner can realistically start.]</p>\n<p style=\"font-size:12px;color:#888;font-weight:600;letter-spacing:1px;margin:0 0 8px;\">TYPICAL MONTHLY EARNINGS AS YOU GROW</p>\n<table width=\"100%\" cellpadding=\"4\" cellspacing=\"0\" style=\"margin:0 0 16px;\">\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;width:90px;\">Beginner</td><td><div style=\"background:#a29bfe;height:18px;border-radius:4px;width:[incBarBeginner];\"></div></td><td style=\"font-size:10px;color:#888;width:80px;text-align:right;\">[incomeBeginner]</td></tr>\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;\">Intermediate</td><td><div style=\"background:#8e80ee;height:18px;border-radius:4px;width:[incBarIntermediate];\"></div></td><td style=\"font-size:10px;color:#888;text-align:right;\">[incomeIntermediate]</td></tr>\n<tr><td style=\"font-size:11px;color:#2d3436;font-weight:700;\">Pro / Expert</td><td><div style=\"background:#6C5CE7;height:18px;border-radius:4px;width:[incBarPro];\"></div></td><td style=\"font-size:10px;color:#888;text-align:right;\">[incomePro]</td></tr>\n</table>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">💵 <strong>[Earning path 1]</strong> — [how it works]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">💵 <strong>[Earning path 2]</strong> — [how it works]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">💵 <strong>[Earning path 3]</strong> — [how it works]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🔗 SKILL STACKING — 10X YOUR VALUE</h3>\n<p style=\"font-size:14px;color:#444;line-height:1.8;margin:0 0 12px;\">[One sentence: pairing this skill with a few others makes you rare and far more valuable than mastering it alone.]</p>\n<div style=\"background:#F8F7FF;padding:16px 20px;border-radius:10px;margin:0 0 28px;\">\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">➕ <strong>[Complementary skill 1]</strong> — [why this combo is powerful]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0 0 8px;\">➕ <strong>[Complementary skill 2]</strong> — [why this combo is powerful]</p>\n<p style=\"font-size:14px;color:#2d3436;line-height:1.7;margin:0;\">➕ <strong>[Complementary skill 3]</strong> — [why this combo is powerful]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">⚠️ MISTAKES TO AVOID</h3>\n<div style=\"background:#FFF7F1;border-left:3px solid #E07856;padding:14px 18px;border-radius:0 8px 8px 0;margin:0 0 28px;\">\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 6px;\">🚫 [Common mistake 1 — and what to do instead]</p>\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 6px;\">🚫 [Common mistake 2 — and what to do instead]</p>\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0;\">🚫 [Common mistake 3 — and what to do instead]</p>\n</div>\n\n<hr style=\"border:none;border-top:1px solid #f0f0f0;margin:0 0 24px;\">\n\n<h3 style=\"color:#6C5CE7;font-size:14px;margin:0 0 12px;letter-spacing:1px;\">🌟 YOUR FIRST 3 STEPS — START TODAY</h3>\n<div style=\"background:linear-gradient(135deg,#6C5CE7,#a29bfe);padding:18px 20px;border-radius:10px;margin:0 0 24px;\">\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0 0 8px;\">1️⃣ [One small, specific action they can do in the next hour]</p>\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0 0 8px;\">2️⃣ [A second small, specific action for this week]</p>\n<p style=\"font-size:14px;color:#ffffff;line-height:1.7;margin:0;\">3️⃣ [A third small, specific action for this week]</p>\n</div>\n\n<p style=\"font-size:13px;color:#2d3436;line-height:1.7;margin:0 0 10px;font-style:italic;text-align:center;\">[One short, warm, motivating closing line addressed to the person by name.]</p>\n\n</div>\n\n<div style=\"background:#FAFAFA;padding:18px 30px;border-radius:0 0 12px 12px;border:1px solid #f0f0f0;border-top:none;text-align:center;\">\n<p style=\"margin:0 0 2px;font-size:11px;color:#b2bec3;\">Prepared for [Name]</p>\n<p style=\"margin:0;font-size:11px;color:#ddd;\">Skill Mastery Blueprint ✨ Powered by Gemini AI + n8n</p>\n</div>\n\n</div>\n\nCONTENT RULES:\n- Work for ANY skill — technical or non-technical — with equal depth. A cooking blueprint should be as rich as a coding blueprint.\n- Be specific and concrete everywhere. Name real tools, books, channels, platforms, drills, numbers. Never write vague filler.\n- Tailor difficulty, hours, the 30-day plan and the daily habit to their stated current level AND weekly time.\n- Every chart token must become a real percentage string ending in % so the bars render. The biggest bar in each chart group must be 100%. Never leave a [token] visible.\n- Income figures are realistic rough ranges, never promises.\n- Be warm and motivating, but honest about the real effort required.\n- Replace EVERY [placeholder] — never leave a bracket visible.\n\nOUTPUT RULES:\n- Output ONLY raw HTML. Nothing before or after.\n- First character must be < and last must be >\n- No markdown. No code fences. No commentary."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "maxOutputTokens": 8192
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        48
+      ],
+      "id": "6b28ce81-6b02-493a-88cb-9a47a2ce1fb8",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9otTVrCKt5BttwBY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['Your Email'] }}",
+        "subject": "={{ $('On form submission').item.json['Your Name'] }}, your Research Summary is ready 🔍",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        48
+      ],
+      "id": "c16f7aa4-0314-41fb-aa9b-42cc5ea1a7bb",
+      "name": "Send a message",
+      "webhookId": "250f3908-7d0a-47f6-a46b-acf397139dfa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "VEG97qi0miKoUfTd",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "0271e5c9-9221-4c03-a5d7-53a4060ede4c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "40e89aca8ae0bd1a97b540837d39e0a0e675095d333d38ac3df1d4b68bb87ca1"
+  },
+  "id": "ATMDy355f64Hikb9",
+  "tags": []
+}
