@@ -80,4 +80,5 @@ A public n8n form collects 5 inputs:
 
 Shrushti Yadav  
 LSSBB | Operational Excellence & Quality Operations  
-[LinkedIn](https://linkedin.com) | [GitHub](https://github.com)
+[LinkedIn](https://www.linkedin.com/in/srishti-yadav1997?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)
+| [GitHub](https://github.com)
